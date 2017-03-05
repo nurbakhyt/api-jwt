@@ -29,20 +29,13 @@ class ProfileController extends Controller
       }
     }
 
+    // получение профиля
     public function getProfile(Request $request)
     {
         return $request->user();
     }
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api')->except('store');
-    // }
 
+    // регистрация
     public function register(Request $request)
     {
       if($this->checkEmail($request->email))
@@ -63,6 +56,7 @@ class ProfileController extends Controller
         ], 403);
     }
 
+    // Обновление профиля
     public function setProfile(Request $request, $id)
     {
       if($this->checkEmail($request->email, $id))
@@ -71,7 +65,7 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        isset($request->password) ? $user->password = bcrypt($request->password) : null ;
+        isset($request->password) ? $user->password = bcrypt($request->password) : null;
         $user->save();
         return response()->json([
           'status' => 'ok',
