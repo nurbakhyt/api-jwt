@@ -1,6 +1,5 @@
 # Laravel API for JWT auth
 
-> A Vue.js project
 
 The Vue app [here](https://github.com/nurbakhyt/frontend-jwt)
 
