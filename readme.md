@@ -3,7 +3,7 @@
 
 The Vue app [here](https://github.com/nurbakhyt/frontend-jwt)
 
-## Build Setup
+## Summary
 
 ``` bash
 # install dependencies
