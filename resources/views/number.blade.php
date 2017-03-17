@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <h3>Поиск номера из Redis | <a href="/numbers">Список</a> | <a href="/">Главная</a></h3>
+  <h3>Поиск номера из Redis</h3>
 
   @include('search')
 

@@ -14,7 +14,9 @@ class PhoneController extends Controller
   protected $numbers = [];
 
   public function __construct()
-  {}
+  {
+    $this->middleware('auth');
+  }
 
   public function index()
   {
@@ -46,7 +48,7 @@ class PhoneController extends Controller
       );
 
       $filename = date("Y-m-d_H-i-s") . '.csv';
-      Storage::disk('local')->putFileAs('csv', $request->file('csv'), $filename);
+      Storage::disk('local')->putFileAs('csv/' . $request->user()->id, $request->file('csv'), $filename);
 
       return redirect('/')->with('info', 'Данные загружены');
     }

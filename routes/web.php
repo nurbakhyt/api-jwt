@@ -20,3 +20,7 @@ Route::post('/', 'PhoneController@parse_csv');
 
 Route::get('/numbers', 'PhoneController@numbers');
 Route::get('/get', 'PhoneController@in_redis');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
