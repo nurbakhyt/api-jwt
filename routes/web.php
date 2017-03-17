@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', 'PhoneController@index');
+Route::post('/', 'PhoneController@parse_csv');
+
+Route::get('/numbers', 'PhoneController@numbers');
+Route::get('/get', 'PhoneController@in_redis');
