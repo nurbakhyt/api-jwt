@@ -8,27 +8,6 @@ use App\User;
 class ProfileController extends Controller
 {
 
-    protected function checkEmail($email, $id = 0)
-    {
-      // проверка при редактировании email
-      if($id)
-      {
-        $user = User::where('email', $email)->where('id', '<>', $id)->first();
-        if(empty($user))
-          return true;
-        else
-          return false;
-      }
-      // при регистрации
-      else
-      {
-        if(User::where('email', $email)->count())
-          return false;
-        else
-          return true;
-      }
-    }
-
     // получение профиля
     public function getProfile(Request $request)
     {
@@ -38,42 +17,42 @@ class ProfileController extends Controller
     // регистрация
     public function register(Request $request)
     {
-      if($this->checkEmail($request->email))
-      {
-        $user = User::create([
-          'name' => $request->name,
-          'email' => $request->email,
-          'phone' => $request->phone,
-          'password' => bcrypt($request->password),
-        ]);
-        return response()->json([
-          'status' => 'ok',
-          'profile' => $user
-        ]);
-      }
+      $this->validate($request, [
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255|unique:users',
+        'password' => 'required|min:6',
+      ]);
+      $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'password' => bcrypt($request->password),
+      ]);
       return response()->json([
-          'error' => 'Этот email уже зарегистрирован'
-        ], 403);
+        'status' => 'ok',
+        'profile' => $user
+      ]);
     }
 
     // Обновление профиля
     public function setProfile(Request $request, $id)
     {
-      if($this->checkEmail($request->email, $id))
-      {
-        $user = User::findOrFail($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        isset($request->password) ? $user->password = bcrypt($request->password) : null;
-        $user->save();
-        return response()->json([
-          'status' => 'ok',
-          'profile' => $user
-        ]);
-      }
+      $this->validate($request, [
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255|unique:users,email,'.$request->user()->id,
+        'password' => 'sometimes|min:6',
+      ]);
+
+      $user = User::findOrFail($id);
+      $user->name = $request->name;
+      $user->email = $request->email;
+      $user->phone = $request->phone;
+      isset($request->password) ? $user->password = bcrypt($request->password) : null;
+      $user->save();
+
       return response()->json([
-          'error' => 'Этот email уже зарегистрирован'
-        ], 403);
+        'status' => 'ok',
+        'profile' => $user
+      ]);
     }
 }
